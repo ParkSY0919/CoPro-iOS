@@ -14,7 +14,6 @@ class MyProfileView: BaseView {
    
    let profileImage = UIImageView(image : Image.coproLogo)
    let tableView: UITableView = UITableView()
-//   var tableViewHeightConstraint: NSLayoutConstraint?
    
    override func setUI() {
       addSubviews(tableView)
@@ -24,7 +23,7 @@ class MyProfileView: BaseView {
          $0.separatorInset = UIEdgeInsets.zero
          $0.separatorStyle = .singleLine
          $0.register(ProfileImageTableViewCell.self, forCellReuseIdentifier: "ProfileImageTableViewCell")
-         $0.register(MyProfileTableViewCell.self, forCellReuseIdentifier: "MyProfileTableViewCell")
+         $0.register(MyProfileFeatureListTableViewCell.self, forCellReuseIdentifier: "MyProfileFeatureListTableViewCell")
          $0.register(CardTypeSettingsTableViewCell.self, forCellReuseIdentifier: "CardTypeSettingsTableViewCell")
          $0.showsVerticalScrollIndicator = false
          $0.showsHorizontalScrollIndicator = false
@@ -34,7 +33,6 @@ class MyProfileView: BaseView {
    override func setLayout() {
       
       tableView.snp.makeConstraints {
-//         $0.top.bottom.leading.trailing.equalToSuperview()
          $0.edges.equalToSuperview()
          $0.centerX.width.equalToSuperview()
       }

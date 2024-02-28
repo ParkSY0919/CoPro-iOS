@@ -10,7 +10,7 @@ import Then
 import SnapKit
 import KeychainSwift
 
-protocol GithubUrlUpdateDelegate: AnyObject {
+protocol NowGithubUpdateDelegate: AnyObject {
     func didUpdateProfile()
 }
 
@@ -20,7 +20,7 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
       case FirstLogin, NotFirstLogin
    }
    var activeModalType: EditGitHubModalType = .NotFirstLogin
-   weak var githubUrlUpdateDelegate: GithubUrlUpdateDelegate?
+   weak var githubUrlUpdateDelegate: NowGithubUpdateDelegate?
    private let keychain = KeychainSwift()
    var initialUserURL: String?
    var editGitHubURLBody = EditGitHubURLRequestBody()
@@ -272,19 +272,19 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
                         }
                      })
                   }
-                       
-                   
-                   
-                case .requestErr(let message):
-                   print("🔥🔥🔥🔥🔥🔥requestErr🔥🔥🔥🔥🔥🔥🔥🔥 ")
-                    print("Error : \(message)")
-                case .pathErr, .serverErr, .networkFail:
-                    print("another Error")
-                default:
-                    break
-                }
+                  
+                  
+                  
+               case .requestErr(let message):
+                  print("🔥🔥🔥🔥🔥🔥requestErr🔥🔥🔥🔥🔥🔥🔥🔥 ")
+                  print("Error : \(message)")
+               case .pathErr, .serverErr, .networkFail:
+                  print("another Error")
+               default:
+                  break
+               }
             }
-
+            
          case .NotFirstLogin:
             print("NotFirstLogin")
             MyProfileAPI.shared.postEditGitHubURL(token: token, requestBody: editGitHubURLBody, checkFirstlogin: false) { result in
@@ -321,7 +321,7 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
          if textField.text?.count == 0 {
             self.doneButton.backgroundColor = .gray
          } else {
-//            doneButton.isEnabled = true
+            //            doneButton.isEnabled = true
             self.doneButton.backgroundColor = UIColor.P2()
          }
       }
@@ -333,7 +333,7 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
          
          if ((notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue) != nil {
             
-               readyForEdigithub = false
+            readyForEdigithub = false
             UIView.animate(withDuration: 0.3) {
                self.view.layoutIfNeeded()
             }
@@ -351,6 +351,6 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
    
    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
       
-       return true
+      return true
    }
 }

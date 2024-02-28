@@ -10,7 +10,7 @@ import SnapKit
 import Then
 import KeychainSwift
 
-protocol ProfileUpdateDelegate: AnyObject {
+protocol NowProfileUpdateDelegate: AnyObject {
     func didUpdateProfile()
 }
 
@@ -21,7 +21,7 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
    }
    var activeViewType: EditMyProfileViewType = .NotFirstLogin
    private let keychain = KeychainSwift()
-   weak var profileUpdateDelegate: ProfileUpdateDelegate?
+   weak var profileUpdateDelegate: NowProfileUpdateDelegate?
    
    var loginVC = LoginViewController()
    var beforeEditMyProfileData: MyProfileDataModel?
@@ -127,9 +127,9 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
       nickNameTextField.text = beforeEditMyProfileData?.nickName
       isJobsButtonTap = false
       updateButtonState(type: "First")
-         nickNameDuplicateFlag = true
-         nicknameValidity = true
-         editFlag = true
+      nickNameDuplicateFlag = true
+      nicknameValidity = true
+      editFlag = true
       
    }
    
@@ -159,7 +159,6 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
          $0.top.equalToSuperview()
          $0.leading.equalToSuperview().offset(8)
          $0.height.equalTo(21)
-//         $0.width.equalTo(45)
       }
       
       textFieldContainer.snp.makeConstraints {
@@ -177,7 +176,7 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
       nicknameDuplicateCheckLabel.snp.makeConstraints {
          $0.top.equalTo(textFieldContainer.snp.bottom).offset(5)
          $0.leading.equalToSuperview().offset(8)
-//         $0.width.equalTo(150)
+         //         $0.width.equalTo(150)
          $0.height.equalTo(15)
       }
       
@@ -201,111 +200,111 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
    }
    
    private func postEditMyProfile() {
-       if let token = self.keychain.get("accessToken") {
-           switch activeViewType {
-              
-           case .FirstLogin:
-              let checkFirstlogin = true
-              MyProfileAPI.shared.postEditMyProfile(token: token, requestBody: editMyProfileBody, checkFirstlogin: checkFirstlogin) { result in
-                  switch result {
-                  case .success(let data):
-                     if let data = data as? EditMyProfileDTO {
-                          self.keychain.set(data.data.picture, forKey: "currentUserProfileImage")
-                          self.keychain.set(data.data.nickName, forKey: "currentUserNickName")
-                          self.keychain.set(data.data.occupation, forKey: "currentUserOccupation")
-                         self.keychain.set(data.data.email, forKey: "currentUserEmail")
-                         
-                        self.postFcmToken()
-                        print("🍎🍎🍎🍎🍎🍎🍎checkFirstlogin true / postFcmToken 성공🍎🍎🍎🍎🍎🍎🍎🍎🍎")
-                        self.dismiss(animated: true) { [weak self] in
-                            let loginViewController = LoginViewController()
-                            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                                let delegate = windowScene.delegate as? SceneDelegate,
-                                let window = delegate.window {
-                                window.rootViewController = loginViewController
-                                window.makeKeyAndVisible()
-                                let alertVC = EditGithubModalViewController()
-                                alertVC.activeModalType = .FirstLogin
-                                loginViewController.present(alertVC, animated: true, completion: nil)
-                            }
+      if let token = self.keychain.get("accessToken") {
+         switch activeViewType {
+            
+         case .FirstLogin:
+            let checkFirstlogin = true
+            MyProfileAPI.shared.postEditMyProfile(token: token, requestBody: editMyProfileBody, checkFirstlogin: checkFirstlogin) { result in
+               switch result {
+               case .success(let data):
+                  if let data = data as? EditMyProfileDTO {
+                     self.keychain.set(data.data.picture, forKey: "currentUserProfileImage")
+                     self.keychain.set(data.data.nickName, forKey: "currentUserNickName")
+                     self.keychain.set(data.data.occupation, forKey: "currentUserOccupation")
+                     self.keychain.set(data.data.email, forKey: "currentUserEmail")
+                     
+                     self.postFcmToken()
+                     print("🍎🍎🍎🍎🍎🍎🍎checkFirstlogin true / postFcmToken 성공🍎🍎🍎🍎🍎🍎🍎🍎🍎")
+                     self.dismiss(animated: true) {
+                        let loginViewController = LoginViewController()
+                        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                           let delegate = windowScene.delegate as? SceneDelegate,
+                           let window = delegate.window {
+                           window.rootViewController = loginViewController
+                           window.makeKeyAndVisible()
+                           let alertVC = EditGithubModalViewController()
+                           alertVC.activeModalType = .FirstLogin
+                           loginViewController.present(alertVC, animated: true, completion: nil)
                         }
-                      }
-                  case .requestErr(let message):
-                      print("Error : \(message)")
-                  case .pathErr, .serverErr, .networkFail:
-                      print("another Error")
-                  default:
-                      break
+                     }
                   }
-              }
-              
-           case .NotFirstLogin:
-              let checkFirstlogin = false
-              MyProfileAPI.shared.postEditMyProfile(token: token, requestBody: editMyProfileBody, checkFirstlogin: checkFirstlogin) { result in
-                   switch result {
-                   case .success(_):
-                      DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                          self.showAlert(title: "프로필 수정을 완료하였습니다",
-                                         confirmButtonName: "확인",
-                                         confirmButtonCompletion: { [self] in
-                              self.profileUpdateDelegate?.didUpdateProfile()
-                              self.dismiss(animated: true)
-                          })
-                      }
-                      
-                       print("NotFirstLogin 타입 / checkFirstlogin false / 프로필수정 성공공")
-                   case .requestErr(let message):
-                       print("Error : \(message)")
-                   case .pathErr, .serverErr, .networkFail:
-                       print("another Error")
-                   default:
-                       break
-                   }
+               case .requestErr(let message):
+                  print("Error : \(message)")
+               case .pathErr, .serverErr, .networkFail:
+                  print("another Error")
+               default:
+                  break
                }
-           }
-       }
+            }
+            
+         case .NotFirstLogin:
+            let checkFirstlogin = false
+            MyProfileAPI.shared.postEditMyProfile(token: token, requestBody: editMyProfileBody, checkFirstlogin: checkFirstlogin) { result in
+               switch result {
+               case .success(_):
+                  DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                     self.showAlert(title: "프로필 수정을 완료하였습니다",
+                                    confirmButtonName: "확인",
+                                    confirmButtonCompletion: { [self] in
+                        self.profileUpdateDelegate?.didUpdateProfile()
+                        self.dismiss(animated: true)
+                     })
+                  }
+                  
+                  print("NotFirstLogin 타입 / checkFirstlogin false / 프로필수정 성공공")
+               case .requestErr(let message):
+                  print("Error : \(message)")
+               case .pathErr, .serverErr, .networkFail:
+                  print("another Error")
+               default:
+                  break
+               }
+            }
+         }
+      }
    }
    
-   func getTopViewController() -> UIViewController? {
-          if var topController = UIApplication.shared.keyWindow?.rootViewController {
-              while let presentedViewController = topController.presentedViewController {
-                  topController = presentedViewController
-              }
-              return topController
-          }
-          return nil
-      }
+//   func getTopViewController() -> UIViewController? {
+//      if var topController = UIApplication.shared.keyWindow?.rootViewController {
+//         while let presentedViewController = topController.presentedViewController {
+//            topController = presentedViewController
+//         }
+//         return topController
+//      }
+//      return nil
+//   }
    
    func postFcmToken() {
       print("🔥")
       
-       guard let token = self.keychain.get("accessToken") else {
-           print("No accessToken found in keychain.")
-           return
-       }
+      guard let token = self.keychain.get("accessToken") else {
+         print("No accessToken found in keychain.")
+         return
+      }
       guard let fcmToken = keychain.get("FcmToken") else {return print("postFcmToken 안에 FcmToken 설정 에러")}
       
       NotificationAPI.shared.postFcmToken(token: token, requestBody: FcmTokenRequestBody(fcmToken: fcmToken)) { result in
-           switch result {
-           case .success(_):
-              print("FcmToken 보내기 성공")
-               
-           case .requestErr(let message):
-               // 요청 에러인 경우
-               print("Error : \(message)")
-              if (message as AnyObject).contains("401") {
-                   // 만료된 토큰으로 인해 요청 에러가 발생한 경우
-               }
-               
-           case .pathErr, .serverErr, .networkFail:
-               // 다른 종류의 에러인 경우
-               print("another Error")
-           default:
-               break
-           }
-       }
+         switch result {
+         case .success(_):
+            print("FcmToken 보내기 성공")
+            
+         case .requestErr(let message):
+            // 요청 에러인 경우
+            print("Error : \(message)")
+            if (message as AnyObject).contains("401") {
+               // 만료된 토큰으로 인해 요청 에러가 발생한 경우
+            }
+            
+         case .pathErr, .serverErr, .networkFail:
+            // 다른 종류의 에러인 경우
+            print("another Error")
+         default:
+            break
+         }
+      }
    }
-
+   
    
    
    private func returnEditMyProfileUIHeight(type: String) -> CGFloat {
@@ -687,20 +686,10 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
                
             case .requestErr(let message):
                print("Error : \(message)")
-//               LoginAPI.shared.refreshAccessToken { result in
-//                   switch result {
-//                   case .success(_):
-//                       DispatchQueue.main.async {
-//                          self.getNickNameDuplication(nickname: nickname)
-//                       }
-//                   case .failure(let error):
-//                       print("토큰 재발급 실패: \(error)")
-//                   }
-//               }
             case .pathErr, .serverErr, .networkFail:
-                print("another Error")
+               print("another Error")
             default:
-                break
+               break
             }
          }
       }
@@ -740,17 +729,6 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
                 confirmButtonName: "확인")
    }
    
-//   func successEditProfile() {
-//      DispatchQueue.main.async {
-//          let alert = UIAlertController(title: "프로필 수정을 완료하였습니다", message: nil, preferredStyle: .alert)
-//          alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { [weak self] _ in
-//              self?.profileUpdateDelegate?.didUpdateProfile()
-//              self?.dismiss(animated: true)
-//          }))
-//          self.present(alert, animated: true, completion: nil)
-//      }
-//   }
-   
    func faileEditProfile() {
       showAlert(title: "프로필 수정을 실패하였습니다",
                 confirmButtonName: "확인",
@@ -774,8 +752,5 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
          self.view.layoutIfNeeded()
       }
    }
-   
-   
-   
    
 }
