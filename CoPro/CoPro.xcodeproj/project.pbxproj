@@ -141,7 +141,7 @@
 		9E8FB6FD2B6171FA00C02028 /* EditGitHubURLDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E8FB6FC2B6171FA00C02028 /* EditGitHubURLDTO.swift */; };
 		9E98F2F12B4A49CE00A6756A /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E98F2F02B4A49CE00A6756A /* MyProfileViewController.swift */; };
 		9E98F2F32B4A49DC00A6756A /* MyProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E98F2F22B4A49DC00A6756A /* MyProfileView.swift */; };
-		9E98F2F52B4FA46B00A6756A /* MyProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E98F2F42B4FA46B00A6756A /* MyProfileTableViewCell.swift */; };
+		9E98F2F52B4FA46B00A6756A /* MyProfileFeatureListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E98F2F42B4FA46B00A6756A /* MyProfileFeatureListTableViewCell.swift */; };
 		9E98F2F72B4FC64600A6756A /* CardTypeSettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E98F2F62B4FC64600A6756A /* CardTypeSettingsTableViewCell.swift */; };
 		9E98F2F92B5145A300A6756A /* ProfileImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E98F2F82B5145A300A6756A /* ProfileImageTableViewCell.swift */; };
 		9EF2EE202B8BC3B500C87DDC /* OppositeInfoCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF2EE1F2B8BC3B500C87DDC /* OppositeInfoCardViewController.swift */; };
@@ -365,7 +365,7 @@
 		9E8FB6FC2B6171FA00C02028 /* EditGitHubURLDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditGitHubURLDTO.swift; sourceTree = "<group>"; };
 		9E98F2F02B4A49CE00A6756A /* MyProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileViewController.swift; sourceTree = "<group>"; };
 		9E98F2F22B4A49DC00A6756A /* MyProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileView.swift; sourceTree = "<group>"; };
-		9E98F2F42B4FA46B00A6756A /* MyProfileTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileTableViewCell.swift; sourceTree = "<group>"; };
+		9E98F2F42B4FA46B00A6756A /* MyProfileFeatureListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileFeatureListTableViewCell.swift; sourceTree = "<group>"; };
 		9E98F2F62B4FC64600A6756A /* CardTypeSettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTypeSettingsTableViewCell.swift; sourceTree = "<group>"; };
 		9E98F2F82B5145A300A6756A /* ProfileImageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageTableViewCell.swift; sourceTree = "<group>"; };
 		9EF2EE1F2B8BC3B500C87DDC /* OppositeInfoCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OppositeInfoCardViewController.swift; sourceTree = "<group>"; };
@@ -957,7 +957,7 @@
 			children = (
 				9E98F2F22B4A49DC00A6756A /* MyProfileView.swift */,
 				9E98F2F82B5145A300A6756A /* ProfileImageTableViewCell.swift */,
-				9E98F2F42B4FA46B00A6756A /* MyProfileTableViewCell.swift */,
+				9E98F2F42B4FA46B00A6756A /* MyProfileFeatureListTableViewCell.swift */,
 				9E0B9CAE2B6C2DE100A5EACB /* RelatedPostsToMeTavleViewCell.swift */,
 				9E0B9CB02B6C336C00A5EACB /* MyCommentsTableViewCell.swift */,
 				9E98F2F62B4FC64600A6756A /* CardTypeSettingsTableViewCell.swift */,
@@ -1662,7 +1662,7 @@
 				9E7401CD2B3C0FB50030C8EC /* BaseNavigationController.swift in Sources */,
 				9E05D2EA2AD521CB00F4CA43 /* Font.swift in Sources */,
 				E3D6D1562AEFACA3003269FF /* URLConst.swift in Sources */,
-				9E98F2F52B4FA46B00A6756A /* MyProfileTableViewCell.swift in Sources */,
+				9E98F2F52B4FA46B00A6756A /* MyProfileFeatureListTableViewCell.swift in Sources */,
 				9E05D2FC2AD5228300F4CA43 /* Image.swift in Sources */,
 				E37AE8002B3C27D0002ABDCD /* MainViewController.swift in Sources */,
 				9E98F2F92B5145A300A6756A /* ProfileImageTableViewCell.swift in Sources */,
