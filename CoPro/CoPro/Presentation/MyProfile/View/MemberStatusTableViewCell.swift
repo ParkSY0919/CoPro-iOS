@@ -8,14 +8,10 @@
 import UIKit
 import SnapKit
 import Then
-protocol EditMemberStatusButtonDelegate: AnyObject {
-    func didTapEditMemberStatusButtonTapped(in cell: MemberStatusTableViewCell)
-}
+
 
 class MemberStatusTableViewCell: UITableViewCell {
-    
-    weak var delegate: EditMemberStatusButtonDelegate?
-    
+   
     let labelContainer: UIView = UIView()
     
    let titleLabel = UILabel().then {
@@ -27,12 +23,11 @@ class MemberStatusTableViewCell: UITableViewCell {
        $0.textColor = UIColor.G3()
     }
     let greaterthanContainer: UIView = UIView()
-    
-    let greaterthanButton = UIButton().then {
-        $0.setImage(UIImage(systemName: "chevron.right"), for: .normal)
-        $0.contentVerticalAlignment = .fill
-        $0.contentHorizontalAlignment = .fill
-    }
+   
+   let greaterthanImage = UIImageView().then {
+      $0.image = UIImage(systemName: "chevron.right")
+      $0.contentMode = .scaleAspectFill
+   }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -49,8 +44,7 @@ class MemberStatusTableViewCell: UITableViewCell {
         contentView.addSubviews(labelContainer, greaterthanContainer)
         greaterthanContainer.isUserInteractionEnabled = true
         labelContainer.addSubviews(titleLabel, subTitleLabel)
-        greaterthanContainer.addSubviews(greaterthanButton)
-        greaterthanButton.addTarget(self, action: #selector(didTapEditMemberStatusButtonTapped), for: .touchUpInside)
+        greaterthanContainer.addSubviews(greaterthanImage)
         
         labelContainer.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(16)
@@ -76,16 +70,13 @@ class MemberStatusTableViewCell: UITableViewCell {
            $0.height.equalTo(20)
        }
        
-       greaterthanButton.snp.makeConstraints {
+       greaterthanImage.snp.makeConstraints {
            $0.centerY.equalToSuperview()
            $0.trailing.equalToSuperview()
            $0.width.equalTo(10)
            $0.height.equalTo(13)
        }
     }
-    
-    @objc func didTapEditMemberStatusButtonTapped(_ sender: UIButton) {
-        delegate?.didTapEditMemberStatusButtonTapped(in: self)
-    }
+   
 }
 

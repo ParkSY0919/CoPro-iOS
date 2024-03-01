@@ -13,7 +13,7 @@ import KeychainSwift
 class MyProfileViewController: BaseViewController, UITableViewDataSource, UITableViewDelegate {
    
    enum CellType {
-      case profile, cardChange, myTrace
+      case profile, cardChange, myTrace, logout
    }
    
    private let keychain = KeychainSwift()
@@ -86,32 +86,6 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
       }
    }
    
-   func postEditCardViewType(CardViewType: Int) {
-      // 액세스 토큰 가져오기
-      guard let token = self.keychain.get("accessToken") else {
-         print("No accessToken found in keychain.")
-         return
-      }
-      
-      // MyProfileAPI를 사용하여 프로필 타입 변경 요청 보내기
-      MyProfileAPI.shared.postEditCardType(token: token, requestBody: EditCardTypeRequestBody(viewType: CardViewType)) { result in
-         switch result {
-         case .success(_):
-            DispatchQueue.main.async {
-               self.showAlert(title: "프로필 타입 변경에 성공하였습니다", confirmButtonName: "확인")
-            }
-            
-         case .requestErr(let message):
-            // 요청 에러인 경우
-            print("Error : \(message)")
-         case .pathErr, .serverErr, .networkFail:
-            // 다른 종류의 에러인 경우
-            print("another Error")
-         default:
-            break
-         }
-      }
-   }
    
    // 셀 인덱스별 타입 설정
    func cellType(for indexPath: IndexPath) -> CellType {
@@ -120,6 +94,8 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
          return .profile
       case 9:
          return .cardChange
+      case 10:
+         return .logout
       default:
          return .myTrace
       }
@@ -134,12 +110,14 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
          return 70
       case .myTrace:
          return 50
+      case .logout:
+         return 70
       }
    }
    
    //불러올 테이블 셀 개수
    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-      return 10
+      return 11
    }
    
    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -166,6 +144,11 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
          
       case .cardChange:
          let cell = tableView.dequeueReusableCell(withIdentifier: "CardTypeSettingsTableViewCell", for: indexPath) as! CardTypeSettingsTableViewCell
+         cell.selectionStyle = .none
+         return cell
+         
+      case .logout:
+         let cell = tableView.dequeueReusableCell(withIdentifier: "MemberStatusTableViewCell", for: indexPath) as! MemberStatusTableViewCell
          cell.selectionStyle = .none
          return cell
          
@@ -283,6 +266,21 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
          
          self.present(alertController, animated: true, completion: nil)
          
+      case 10:
+         print("현재 뷰컨에서 didTapEditMemberStatusButtonTapped 눌림")
+         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+         
+         let action1 = UIAlertAction(title: "로그아웃", style: .default) { (action) in
+            print("로그아웃 호출")
+            self.signOut()
+         }
+         alertController.addAction(action1)
+         
+         let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+         alertController.addAction(cancelAction)
+         self.present(alertController, animated: true, completion: nil)
+         
+         
       default:
          break
       }
@@ -310,4 +308,46 @@ extension MyProfileViewController: NowProfileUpdateDelegate, NowGithubUpdateDele
       print("✅✅✅✅✅✅✅✅✅✅✅✅")
       getMyProfile()
    }
+   
+   func postEditCardViewType(CardViewType: Int) {
+      guard let token = self.keychain.get("accessToken") else {
+         print("No accessToken found in keychain.")
+         return
+      }
+      // MyProfileAPI를 사용하여 프로필 타입 변경 요청 보내기
+      MyProfileAPI.shared.postEditCardType(token: token, requestBody: EditCardTypeRequestBody(viewType: CardViewType)) { result in
+         switch result {
+         case .success(_):
+            DispatchQueue.main.async {
+               self.showAlert(title: "프로필 타입 변경에 성공하였습니다", confirmButtonName: "확인")
+            }
+            
+         case .requestErr(let message):
+            // 요청 에러인 경우
+            print("Error : \(message)")
+         case .pathErr, .serverErr, .networkFail:
+            // 다른 종류의 에러인 경우
+            print("another Error")
+         default:
+            break
+         }
+      }
+   }
+   
+   func signOut()  {
+      print("로그아웃 시작")
+      keychain.clear()
+      navigationController?.popToRootViewController(animated: true)
+      DispatchQueue.main.async {
+         let loginVC = LoginViewController()
+         
+         if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+            let window = windowScene.windows.first {
+            UIView.transition(with: window, duration: 0.5, options: .transitionCrossDissolve, animations: {
+               window.rootViewController = loginVC
+            }, completion: nil)
+         }
+      }
+   }
+   
 }
